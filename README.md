@@ -59,3 +59,75 @@ Ensure the app deployment YAML includes the database service hostname (e.g., db-
 
 kubectl apply -f app-deployment.yaml
 
+
+
+
+
+Steps to Use Raspberry Pi OS (64-bit)
+Install 64-bit Raspberry Pi OS:
+
+Download and install the 64-bit version of Raspberry Pi OS from the official Raspberry Pi website.
+Update and Upgrade:
+
+Ensure your system is up-to-date.
+sh
+Copy code
+sudo apt update
+sudo apt upgrade -y
+Install Docker:
+
+Install Docker, which is required for running containers.
+sh
+Copy code
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+Install MicroK8s:
+
+Enable the universe repository and install MicroK8s using snap.
+sh
+Copy code
+sudo apt install snapd -y
+sudo snap install core
+sudo snap install microk8s --classic
+Add User to MicroK8s Group:
+
+Add your user to the microk8s group for easier management.
+sh
+Copy code
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+Configure cgroups:
+
+Ensure cgroups are enabled. Add the following to the end of /boot/cmdline.txt:
+makefile
+Copy code
+cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory
+Reboot:
+
+Reboot the Raspberry Pi to apply changes.
+sh
+Copy code
+sudo reboot
+Verify MicroK8s Installation:
+
+Check the status of MicroK8s.
+sh
+Copy code
+microk8s status --wait-ready
+Joining Nodes
+Once MicroK8s is installed on all Raspberry Pis, you can join them into a cluster:
+
+On the Control Plane Node:
+
+Get the join token and instructions.
+sh
+Copy code
+microk8s add-node
+On the Worker Nodes:
+
+Use the provided join command from the control plane to join the worker nodes.
+sh
+Copy code
+microk8s join <control-plane-ip>:<port>/<token>
+
