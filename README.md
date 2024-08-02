@@ -42,8 +42,8 @@ then
 sudo usermod -a -G microk8s <user>
 sudo usermod -aG microk8s <user>
 mkdir -p ~/.kube
-sudo chown -R <user>:<user> ~/.kube
-sudo chown -R <user>:<user> /var/snap/microk8s
+sudo chown -R {user}:{user} ~/.kube
+sudo chown -R {user}:{user} /var/snap/microk8s
 exit
 
 ssh back in
