@@ -33,6 +33,24 @@ sudo snap install microk8s --classic --channel=1.17/stable
 Channels are made up of a track (or series) and an expected level of stability, based on MicroK8s releases (Stable, Candidate, Beta, Edge). For more information about which releases are available, run:
 
 snap info microk8s
+
+
+2. Change permissions, add alias
+alias kubectl='microk8s kubectl'
+then
+
+sudo usermod -a -G microk8s <user>
+sudo usermod -aG microk8s <user>
+mkdir -p ~/.kube
+sudo chown -R <user>:<user> ~/.kube
+sudo chown -R <user>:<user> /var/snap/microk8s
+exit
+
+ssh back in
+microk8s status --wait-ready
+microk8s kubectl get nodes OR kubectl get nodes 
+
+
 Discovering MicroK8s
 Before going further here is a quick intro to the MicroK8s command line:
 
@@ -45,7 +63,7 @@ You can easily enable Kubernetes add-ons, eg. to enable “kubedns”: microk8s.
 
 
 
-2.) Deploy app, database, and services on kubernetes once setup:
+3.) Deploy app, database, and services on kubernetes once setup:
 
 Deploy the database: Apply the PVC and database deployment YAML files.
 
@@ -131,3 +149,16 @@ sh
 Copy code
 microk8s join <control-plane-ip>:<port>/<token>
 
+
+
+
+
+what works:
+microk8s status --wait-ready
+alias kubectl='microk8s kubectl'
+microk8s config > ~/.kube/config
+kubectl get nodes
+microk8s.add-node
+
+Now you get the 
+microk8s join <ip address> thing
