@@ -39,15 +39,17 @@ snap info microk8s
 alias kubectl='microk8s kubectl'
 then
 
-sudo usermod -a -G microk8s <user>
-sudo usermod -aG microk8s <user>
+sudo usermod -aG microk8s {user}
+sudo chown -f -R pi ~/.kube
 mkdir -p ~/.kube
+sudo chown -R {user
 sudo chown -R {user}:{user} ~/.kube
 sudo chown -R {user}:{user} /var/snap/microk8s
 exit
 
 ssh back in
 microk8s status --wait-ready
+alias kubectl='microk8s kubectl'
 microk8s kubectl get nodes OR kubectl get nodes 
 
 
