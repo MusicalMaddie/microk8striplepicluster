@@ -1,6 +1,12 @@
 # microk8striplepicluster
 An experiment I'm doing to learn about kubernetes and containerization in general. This takes three raspberry pis (in my case, two raspi 3's and a new 8gb ram raspi 5 all using 64gb sd cards) and attempts to create a cluster to run an application in the same way as larger kubernetes, to learn about the yaml file format and deploying applications.
 
+TL:DR:
+-Load Kubernetes and create cluster with three raspberry pis
+-Create hello-world Java Application that uses gradle and spring boot
+-Use docker and push to dockerhub
+-Get docker image from docker hub with control plane node and run application
+
 using this resource as a guide:
 https://ubuntu.com/tutorials/how-to-kubernetes-cluster-on-raspberry-pi#4-installing-microk8s
 #saved as .html in case it changes in the future
@@ -164,3 +170,21 @@ microk8s.add-node
 
 Now you get the 
 microk8s join <ip address> thing
+
+
+
+
+
+32948.) JAVA_EXAMPLE contains a pre-built application. You have to change the docker username to your own (as well as the docker repository if you do a different name on dockerhub) within the yaml files that are in the FILES_FOR_CONTROL_PLANE folder for this application to successfully use docker and dockerhub.
+
+
+Build the application with docker and push to docker hub using
+docker buildx build --platform linux/arm64,linux/amd64 -t {USERNAMEforDOCKER/spring-boot-hello-world --push .
+
+Once the docker image is in dockerhub and accessible, you can go to the kubernetes control plane node and pull that image and run it using 
+kubectl apply -f ~/k8s-configs/deployment.yaml
+kubectl apply -f ~/k8s-configs/service.yaml
+
+After this, it should be running! We have it on port 32000 using NodePort so use the following address in a browser to see your app running: (note: it will only show locally, not outside the wifi system)
+{ip.addres.of.node.you.want.to.access}/32000  (i accessed using the control plane node just because it had more ram, but I'm not sure how accessing it on a different node affects things which is why I'm doing this project :D )
+
